@@ -2,7 +2,7 @@
     "name": "expertskb/telegram_php",
     "description": "The 'TelegramPhp' class facilitates database backup operations by exporting tables and data into a SQL file.",
     "type": "libaray",
-    "license": "MIT 2.0",
+    "license": "GPL-2.0-or-later",
     "autoload": {
         "psr-4": {
             "Expertskb\\TelegramPhp\\": "src/"
