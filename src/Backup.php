@@ -1,6 +1,6 @@
 <?php
 
-namespace Expertskb\TelegramPhp;;
+namespace Expertskb\TelegramPhp;
 
 use DateTimeZone;
 use DateTime;
@@ -15,33 +15,46 @@ class Backup
     private $username;
     private $bot_token;
     private $chat_id;
+    private $debug = false;
 
     public function __construct($host, $username, $database, $passowrd, $bot_token, $chat_id = [])
     {
-        $this->database = $database;
-        $this->username = $username;
         $this->host = $host;
+        $this->username = $username;
+        $this->database = $database;
         $this->password = $passowrd;
         $this->bot_token = $bot_token;
         $this->chat_id = $chat_id;
     }
 
-    public static function run()
+    public function setDeBug($command)
     {
-        $__PATH = self::exportDatabase();
+        $this->debug = $command;
+    }
 
-        if (!empty(strval($__PATH))) {
-            $chat_id_count = count(self::$chat_id);
+    public function run()
+    {
+        $__PATH = $this->exportDatabase();
 
-            if (intval($chat_id_count) > 1) {
-                foreach (self::$chat_id as $ch_id) {
-                    $data = json_decode(self::Telegram($__PATH, $ch_id), true);
+        if (is_file($__PATH)) {
+            if (!empty(strval($__PATH))) {
+                $chat_id_count = count($this->chat_id);
+                $chat_id = $this->chat_id;
 
-                    if ($data['ok']) {
-                        if (file_exists($__PATH) && is_file($__PATH) && is_writable($__PATH)) {
-                            if (chmod($__PATH, 0755)) {
-                                if (unlink($__PATH)) {
-                                    // echo "SUCCESSFULLY DELETED THIS FILE";
+                if (intval($chat_id_count) > 1) {
+                    foreach ($chat_id as $ch_id) {
+                        $data = json_decode($this->Telegram($__PATH, $ch_id), true);
+
+                        if ($data !== null && isset($data['ok']) && $data['ok']) {
+                            if ($this->debug) {
+                                echo json_encode($data);
+                            }
+
+                            if (file_exists($__PATH)) {
+                                if (chmod($__PATH, 0755)) {
+                                    if (unlink($__PATH)) {
+                                        // echo "SUCCESSFULLY DELETED THIS FILE \n";
+                                    }
                                 }
                             }
                         }
@@ -50,6 +63,7 @@ class Backup
             }
         }
     }
+
 
     protected function exportDatabase()
     {
@@ -120,7 +134,7 @@ class Backup
         $backup_name = $backup_name ? $backup_name : $this->database . ' __ (' . date('hsdmY') . ').sql';
 
         // Write content to file
-        $file = fopen("$backup_name", "w");
+        $file = fopen($backup_name, "w");
         fwrite($file, $content);
         fclose($file);
 
