@@ -15,6 +15,6 @@
     ],
     "require": {
         "php": ">=5.6",
-        "expertskb/telegram_php": "^1.0" // Modify this line to specify the version constraint
+        "expertskb/telegram_php": "^1.0"
     }
 }
