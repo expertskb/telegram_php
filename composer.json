@@ -1,7 +1,7 @@
 {
     "name": "expertskb/telegram_php",
     "description": "The 'TelegramPhp' class facilitates database backup operations by exporting tables and data into a SQL file.",
-    "type": "libaray",
+    "type": "library",
     "license": "GPL-2.0-or-later",
     "autoload": {
         "psr-4": {
@@ -14,6 +14,7 @@
         }
     ],
     "require": {
-        "php": ">=5.6"
+        "php": ">=5.6",
+        "expertskb/telegram_php": "^1.0" // Modify this line to specify the version constraint
     }
 }
