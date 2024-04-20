@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * TelegramPhp Database Backup Library
+ *
+ * This class facilitates database backup operations by exporting tables and data into a SQL file
+ * and sending it to a Telegram chat. This library is useful for automating database backups
+ * and sending them to specified Telegram chats for storage and monitoring.
+ *
+ * @package Expertskb\TelegramPhp
+ * @author Shakib Ahmed
+ * @version 1.2
+ */
+
 namespace Expertskb\TelegramPhp;
 
 use DateTimeZone;
@@ -37,24 +49,22 @@ class Backup
         $__PATH = $this->exportDatabase();
 
         if (is_file($__PATH)) {
-            if (!empty(strval($__PATH))) {
-                $chat_id_count = count($this->chat_id);
-                $chat_id = $this->chat_id;
+            $chat_ids = (array) $this->chat_id;
 
-                if (intval($chat_id_count) > 1) {
-                    foreach ($chat_id as $ch_id) {
-                        $data = json_decode($this->Telegram($__PATH, $ch_id), true);
+            if (!empty($__PATH) && is_array($chat_ids)) {
+                foreach ($chat_ids as $ch_id) {
+                    $data = json_decode($this->Telegram($__PATH, $ch_id), true);
 
-                        if ($data !== null && isset($data['ok']) && $data['ok']) {
-                            if ($this->debug) {
-                                echo json_encode($data);
-                            }
+                    if ($data !== null && isset($data['ok']) && $data['ok']) {
 
-                            if (file_exists($__PATH)) {
-                                if (chmod($__PATH, 0755)) {
-                                    if (unlink($__PATH)) {
-                                        // echo "SUCCESSFULLY DELETED THIS FILE \n";
-                                    }
+                        if (is_bool($this->debug)) {
+                            echo json_encode($data);
+                        }
+
+                        if (file_exists($__PATH)) {
+                            if (chmod($__PATH, 0755)) {
+                                if (unlink($__PATH)) {
+                                    // echo "SUCCESSFULLY DELETED THIS FILE \n";
                                 }
                             }
                         }
@@ -63,6 +73,7 @@ class Backup
             }
         }
     }
+
 
 
     protected function exportDatabase()
