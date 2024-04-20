@@ -58,7 +58,7 @@ $backup->setDebug(true);
 use Expertskb\TelegramPhp\Backup;
 
 // Initialize the Backup class
-$backup = new Backup('localhost', 'username', 'my_database', 'password', 'your_bot_token', ['chat_id1', 'chat_id2']);
+$backup = new Backup('localhost', 'username', 'my_database', 'password', 'your_bot_token', ['ps_your_id1', 'ps_your_id2']);
 
 // Enable debug mode
 $backup->setDebug(true);
