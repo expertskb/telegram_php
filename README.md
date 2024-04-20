@@ -1,4 +1,4 @@
-Here's a README.md guide for your library:
+Here's an updated version of the README.md guide with additional information about the `setDebug()` method:
 
 ---
 
@@ -44,13 +44,24 @@ $backup->run();
 
 This will export the database tables and data into a SQL file and send it to the specified Telegram chat(s).
 
-## Example
+### Optional: Enable Debug Mode
+
+You can enable debug mode to receive detailed logs by calling the `setDebug()` method:
+
+```php
+$backup->setDebug(true);
+```
+
+### Example
 
 ```php
 use Expertskb\TelegramPhp\Backup;
 
 // Initialize the Backup class
 $backup = new Backup('localhost', 'username', 'my_database', 'password', 'your_bot_token', ['chat_id1', 'chat_id2']);
+
+// Enable debug mode
+$backup->setDebug(true);
 
 // Run the backup process
 $backup->run();
