@@ -46,34 +46,41 @@ class Backup
 
     public function run()
     {
+        // Export the database and get the file path
         $__PATH = $this->exportDatabase();
 
+        // Check if the path is a valid file
         if (is_file($__PATH)) {
-            $chat_ids = (array) $this->chat_id;
 
+            // Ensure $chat_id is an array
+            $chat_ids = is_array($this->chat_id) ? $this->chat_id : (array) $this->chat_id;
+
+            // Check if the path is not empty and $chat_ids is an array
             if (!empty($__PATH) && is_array($chat_ids)) {
                 foreach ($chat_ids as $ch_id) {
+                    // Send the file via Telegram
                     $data = json_decode($this->Telegram($__PATH, $ch_id), true);
 
+                    // Check if the data is valid and the operation was successful
                     if ($data !== null && isset($data['ok']) && $data['ok']) {
-
-                        if (is_bool($this->debug)) {
+                        // If debugging is enabled, output the data
+                        if (is_bool($this->debug) && $this->debug) {
                             echo json_encode($data);
                         }
+                    }
+                }
 
-                        if (file_exists($__PATH)) {
-                            if (chmod($__PATH, 0755)) {
-                                if (unlink($__PATH)) {
-                                    // echo "SUCCESSFULLY DELETED THIS FILE \n";
-                                }
-                            }
+                // Clean up the file after all iterations
+                if (file_exists($__PATH)) {
+                    if (chmod($__PATH, 0755)) {
+                        if (unlink($__PATH)) {
+                            // File successfully deleted
                         }
                     }
                 }
             }
         }
     }
-
 
 
     protected function exportDatabase()
